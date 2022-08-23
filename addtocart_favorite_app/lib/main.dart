@@ -1,6 +1,6 @@
 import 'package:addtocart_favorite_app/provider/product_provider.dart';
+import 'package:addtocart_favorite_app/screens/bottom_navigation_screen.dart';
 import 'package:addtocart_favorite_app/screens/product_details_screen.dart';
-import 'package:addtocart_favorite_app/screens/product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const ProductScreen(),
+        home: const BottomNavigationScreen(),
         routes: {
           ProductDetailScreen.routeName: (context) =>
               const ProductDetailScreen(),
