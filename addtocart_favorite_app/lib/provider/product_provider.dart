@@ -5,7 +5,7 @@ class ProductProvider with ChangeNotifier {
   final List<Product> _productList = [
     Product(
       id: DateTime.now().toIso8601String(),
-      title: 'Title1',
+      title: 'Doggo',
       price: 99.99,
     ),
     Product(

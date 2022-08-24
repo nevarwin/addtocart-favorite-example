@@ -14,7 +14,7 @@ class BottomNavigationScreen extends StatefulWidget {
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   int currentIndex = 0;
 
-  final List<Widget> pages = [
+  final List<Widget> _pages = [
     const ProductScreen(),
     const ProductFavoriteScreen(),
   ];
@@ -28,7 +28,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages[currentIndex],
+      body: _pages[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         onTap: _selectedPage,
