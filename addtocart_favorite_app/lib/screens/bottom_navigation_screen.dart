@@ -15,8 +15,8 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   int currentIndex = 0;
 
   final List<Widget> _pages = [
-    const ProductScreen(),
-    const ProductFavoriteScreen(),
+    ProductScreen(),
+    ProductFavoriteScreen(),
   ];
 
   void _selectedPage(int index) {

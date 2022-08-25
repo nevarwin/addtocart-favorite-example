@@ -6,11 +6,15 @@ import 'package:provider/provider.dart';
 import './product_item_widget.dart';
 
 class ProductGridWidget extends StatelessWidget {
-  const ProductGridWidget({Key? key}) : super(key: key);
+  const ProductGridWidget({
+    Key? key,
+    required this.isFavorite,
+  }) : super(key: key);
+
+  final bool isFavorite;
 
   @override
   Widget build(BuildContext context) {
-    var isFavorite = false;
     final productData = Provider.of<ProductProvider>(context);
     final product = isFavorite
         ? productData.getfavoriteProducts
