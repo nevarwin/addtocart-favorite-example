@@ -1,3 +1,4 @@
+import 'package:addtocart_favorite_app/provider/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,6 +11,10 @@ class ProductItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final products = Provider.of<Product>(
+      context,
+      listen: false,
+    );
+    final cart = Provider.of<CartProvider>(
       context,
       listen: false,
     );
@@ -53,7 +58,14 @@ class ProductItemWidget extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             trailing: IconButton(
-              onPressed: () {},
+              highlightColor: Colors.lightGreenAccent,
+              onPressed: () {
+                cart.addItem(
+                  products.id,
+                  products.title,
+                  products.price,
+                );
+              },
               icon: const Icon(
                 Icons.shopping_cart,
               ),
