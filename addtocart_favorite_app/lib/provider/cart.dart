@@ -48,7 +48,8 @@ class CartProvider with ChangeNotifier {
           price: price,
         ),
       );
-    
-    notifyListeners();
+
+      notifyListeners();
+    }
   }
 }
