@@ -1,5 +1,6 @@
 import 'package:addtocart_favorite_app/provider/product_provider.dart';
 import 'package:addtocart_favorite_app/screens/bottom_navigation_screen.dart';
+import 'package:addtocart_favorite_app/screens/cart_screen.dart';
 import 'package:addtocart_favorite_app/screens/product_details_screen.dart';
 import './provider/cart.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         routes: {
           ProductDetailScreen.routeName: (context) =>
               const ProductDetailScreen(),
+          CartScreen.routeName: (context) => const CartScreen(),
         },
       ),
     );
