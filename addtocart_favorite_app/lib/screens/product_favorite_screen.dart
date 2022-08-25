@@ -12,7 +12,9 @@ class ProductFavoriteScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Favorites'),
       ),
-      body: ProductGridWidget(isFavorite: isFavorite),
+      body: ProductGridWidget(
+        isFavorite: isFavorite,
+      ),
     );
   }
 }

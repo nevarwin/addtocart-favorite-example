@@ -65,6 +65,7 @@ class ProductItemWidget extends StatelessWidget {
                   products.title,
                   products.price,
                 );
+                print('added to cart');
               },
               icon: const Icon(
                 Icons.shopping_cart,

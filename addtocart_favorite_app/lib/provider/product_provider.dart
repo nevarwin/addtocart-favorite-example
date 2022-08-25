@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'product_model.dart';
 
 class ProductProvider with ChangeNotifier {
@@ -20,7 +21,7 @@ class ProductProvider with ChangeNotifier {
   }
 
   List<Product> get getfavoriteProducts {
-    return _productList.where((element) => element.isFavorite).toList();
+    return _productList.where((product) => product.isFavorite).toList();
   }
 
   Product findById(String id) {
