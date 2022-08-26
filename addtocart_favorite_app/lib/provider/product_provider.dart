@@ -12,7 +12,17 @@ class ProductProvider with ChangeNotifier {
     Product(
       id: DateTime.now().toIso8601String(),
       title: 'Shoe',
-      price: 9.99,
+      price: 4000,
+    ),
+    Product(
+      id: DateTime.now().toIso8601String(),
+      title: 'Tshirt',
+      price: 150,
+    ),
+    Product(
+      id: DateTime.now().toIso8601String(),
+      title: 'Watch',
+      price: 5000,
     ),
   ];
 
