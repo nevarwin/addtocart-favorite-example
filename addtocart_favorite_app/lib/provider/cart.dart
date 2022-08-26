@@ -22,7 +22,7 @@ class CartProvider with ChangeNotifier {
   }
 
   int get getCartCount {
-    return getCartItems.length;
+    return _cartItems.length;
   }
 
   void addItem(
@@ -33,23 +33,32 @@ class CartProvider with ChangeNotifier {
     if (_cartItems.containsKey(productId)) {
       _cartItems.update(
         productId,
-        (existingCartItem) {
-          return Cart(
-            id: existingCartItem.id,
-            title: existingCartItem.title,
-            price: existingCartItem.price,
-            quantity: existingCartItem.quantity + 1,
-          );
-        },
-        ifAbsent: () => Cart(
+        (existingCartItem) => Cart(
+          id: existingCartItem.id,
+          title: existingCartItem.title,
+          price: existingCartItem.price,
+          quantity: existingCartItem.quantity + 1,
+        ),
+      );
+    } else {
+      _cartItems.putIfAbsent(
+        productId,
+        () => Cart(
           id: DateTime.now().toString(),
           title: title,
           quantity: 1,
           price: price,
         ),
       );
-
-      notifyListeners();
     }
+    notifyListeners();
+  }
+
+  double get getTotalAmount {
+    var total = 0.0;
+    _cartItems.forEach((key, cartItem) {
+      total += cartItem.price * cartItem.quantity;
+    });
+    return total;
   }
 }
