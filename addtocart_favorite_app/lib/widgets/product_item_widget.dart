@@ -58,7 +58,6 @@ class ProductItemWidget extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             trailing: IconButton(
-              highlightColor: Colors.lightGreenAccent,
               onPressed: () {
                 cart.addItem(
                   products.id,
