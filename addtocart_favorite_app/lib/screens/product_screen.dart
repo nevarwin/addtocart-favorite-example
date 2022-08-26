@@ -1,10 +1,10 @@
-import 'package:addtocart_favorite_app/provider/cart.dart';
-import 'package:addtocart_favorite_app/screens/cart_screen.dart';
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:badges/badges.dart';
 
+import './cart_screen.dart';
 import '../widgets/product_grid_widget.dart';
+import '../provider/cart.dart';
 
 class ProductScreen extends StatelessWidget {
   ProductScreen({Key? key}) : super(key: key);
@@ -24,8 +24,6 @@ class ProductScreen extends StatelessWidget {
         actions: [
           Consumer<CartProvider>(
             builder: (context, cart, child) {
-              print(cart.getCartCount);
-
               return Badge(
                 position: BadgePosition.topStart(),
                 badgeContent: Text(
@@ -34,15 +32,17 @@ class ProductScreen extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-                child: SizedBox(
-                  width: 50.0,
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    icon: const Icon(Icons.shopping_cart),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(CartScreen.routeName);
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        CartScreen.routeName,
+                      );
                     },
+                    child: const Icon(
+                      Icons.shopping_cart,
+                    ),
                   ),
                 ),
               );
