@@ -20,7 +20,7 @@ class ProductScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('App'),
+        title: const Text('Products'),
         actions: [
           Consumer<CartProvider>(
             builder: (context, cart, child) {

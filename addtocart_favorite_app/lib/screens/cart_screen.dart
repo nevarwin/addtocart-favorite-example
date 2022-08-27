@@ -42,7 +42,7 @@ class CartScreen extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {},
-                    child: const Text('Order Now'),
+                    child: const Text('Checkout'),
                   )
                 ],
               ),
