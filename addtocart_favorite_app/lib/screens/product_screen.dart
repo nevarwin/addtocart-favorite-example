@@ -5,6 +5,7 @@ import 'package:badges/badges.dart';
 import './cart_screen.dart';
 import '../widgets/product_grid_widget.dart';
 import '../provider/cart.dart';
+import '../screens/app_drawer.dart';
 
 class ProductScreen extends StatelessWidget {
   ProductScreen({Key? key}) : super(key: key);
@@ -50,6 +51,7 @@ class ProductScreen extends StatelessWidget {
           ),
         ],
       ),
+      drawer: const AppDrawer(),
       body: ProductGridWidget(
         isFavorite: isFavorite,
       ),

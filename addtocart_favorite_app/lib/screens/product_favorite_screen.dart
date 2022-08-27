@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/product_grid_widget.dart';
+import '../screens/app_drawer.dart';
 
 class ProductFavoriteScreen extends StatelessWidget {
   ProductFavoriteScreen({Key? key}) : super(key: key);
@@ -12,6 +13,7 @@ class ProductFavoriteScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Favorites'),
       ),
+      drawer: const AppDrawer(),
       body: ProductGridWidget(
         isFavorite: isFavorite,
       ),
