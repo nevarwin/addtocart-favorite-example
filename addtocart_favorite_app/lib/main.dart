@@ -1,10 +1,13 @@
-import 'package:addtocart_favorite_app/provider/product_provider.dart';
-import 'package:addtocart_favorite_app/screens/bottom_navigation_screen.dart';
-import 'package:addtocart_favorite_app/screens/cart_screen.dart';
-import 'package:addtocart_favorite_app/screens/product_details_screen.dart';
-import './provider/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import './provider/order.dart';
+import './provider/product_provider.dart';
+import './provider/cart.dart';
+
+import './screens/bottom_navigation_screen.dart';
+import './screens/cart_screen.dart';
+import './screens/product_details_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,6 +26,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => CartProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => OrderProvider(),
         ),
       ],
       child: MaterialApp(
