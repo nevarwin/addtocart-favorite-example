@@ -15,7 +15,7 @@ class Cart {
 }
 
 class CartProvider with ChangeNotifier {
-  final Map<String, Cart> _cartItems = {};
+  Map<String, Cart> _cartItems = {};
 
   Map<String, Cart> get getCartItems {
     return {..._cartItems};
@@ -60,5 +60,10 @@ class CartProvider with ChangeNotifier {
       total += cartItem.price * cartItem.quantity;
     });
     return total;
+  }
+
+  void clearCart() {
+    _cartItems = {};
+    notifyListeners();
   }
 }
