@@ -19,7 +19,12 @@ class CartItem extends StatelessWidget {
       child: ListTile(
         title: Text(title),
         subtitle: Text('Price: $price'),
-        trailing: Text('$quantity x'),
+        trailing: Text(
+          '$quantity x',
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }
