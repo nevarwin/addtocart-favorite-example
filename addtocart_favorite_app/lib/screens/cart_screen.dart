@@ -1,3 +1,4 @@
+import 'package:addtocart_favorite_app/provider/order.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -41,11 +42,19 @@ class CartScreen extends StatelessWidget {
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
-                  TextButton(
-                    onPressed: () {
-                      cart.clearCart();
+                  Consumer<OrderProvider>(
+                    builder: (context, order, child) {
+                      return TextButton(
+                        onPressed: () {
+                          order.addOrders(
+                            cart.getTotalAmount,
+                            cart.getCartItems.values.toList(),
+                          );
+                          cart.clearCart();
+                        },
+                        child: const Text('Checkout'),
+                      );
                     },
-                    child: const Text('Checkout'),
                   )
                 ],
               ),

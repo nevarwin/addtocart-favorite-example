@@ -1,4 +1,6 @@
+import 'package:addtocart_favorite_app/provider/order.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../screens/app_drawer.dart';
 
@@ -9,11 +11,18 @@ class OrderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final orders = Provider.of<OrderProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Orders'),
       ),
       drawer: const AppDrawer(),
+      body: ListView.builder(
+        itemCount: orders.getOrderItems.length,
+        itemBuilder: (context, index) {
+          return Container();
+        },
+      ),
     );
   }
 }
