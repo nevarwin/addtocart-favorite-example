@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/cart.dart';
+import '../widgets/cart_item_widget.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -41,7 +42,9 @@ class CartScreen extends StatelessWidget {
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      cart.clearCart();
+                    },
                     child: const Text('Checkout'),
                   )
                 ],
@@ -52,22 +55,14 @@ class CartScreen extends StatelessWidget {
             child: ListView.builder(
               itemCount: cart.getCartItems.length,
               itemBuilder: (context, index) {
-                return Card(
-                  elevation: 5.0,
-                  child: ListTile(
-                    title: Text(
-                      cart.getCartItems.values.toList()[index].title,
-                    ),
-                    subtitle: Text(
+                return CartItem(
+                  title: cart.getCartItems.values.toList()[index].title,
+                  price:
                       cart.getCartItems.values.toList()[index].price.toString(),
-                    ),
-                    trailing: Text(
-                      cart.getCartItems.values
-                          .toList()[index]
-                          .quantity
-                          .toString(),
-                    ),
-                  ),
+                  quantity: cart.getCartItems.values
+                      .toList()[index]
+                      .quantity
+                      .toString(),
                 );
               },
             ),
