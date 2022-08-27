@@ -8,6 +8,7 @@ import './provider/cart.dart';
 import './screens/bottom_navigation_screen.dart';
 import './screens/cart_screen.dart';
 import './screens/product_details_screen.dart';
+import './screens/order_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,11 +37,13 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const BottomNavigationScreen(),
+        initialRoute: '/',
         routes: {
+          '/': (context) => const BottomNavigationScreen(),
           ProductDetailScreen.routeName: (context) =>
               const ProductDetailScreen(),
           CartScreen.routeName: (context) => const CartScreen(),
+          OrderScreen.routeName: (context) => const OrderScreen(),
         },
       ),
     );
