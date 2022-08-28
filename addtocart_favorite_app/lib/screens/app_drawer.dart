@@ -23,6 +23,12 @@ class AppDrawer extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed('/order-screen');
             },
           ),
+          ListTile(
+            title: const Text('Settings'),
+            onTap: () {
+              Navigator.of(context).pushReplacementNamed('/settings-screen');
+            },
+          ),
         ],
       ),
     );
