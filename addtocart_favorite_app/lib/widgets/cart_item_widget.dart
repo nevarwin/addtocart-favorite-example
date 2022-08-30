@@ -30,6 +30,9 @@ class CartItem extends StatelessWidget {
         ).removeCartItem(productId);
       },
       direction: DismissDirection.endToStart,
+      // dismissThresholds: const {
+      //   DismissDirection.endToStart: 0.4,
+      // },
       background: Container(
         padding: const EdgeInsets.only(right: 20),
         margin: const EdgeInsets.all(4),
