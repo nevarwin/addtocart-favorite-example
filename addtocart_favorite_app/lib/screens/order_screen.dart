@@ -2,7 +2,7 @@ import 'package:addtocart_favorite_app/provider/order.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../screens/app_drawer.dart';
+import '../widgets/app_drawer.dart';
 
 class OrderScreen extends StatelessWidget {
   const OrderScreen({Key? key}) : super(key: key);
