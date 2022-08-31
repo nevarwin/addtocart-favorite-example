@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/product_grid_widget.dart';
-import '../screens/app_drawer.dart';
+import '../widgets/app_drawer.dart';
 
 class ProductFavoriteScreen extends StatelessWidget {
   ProductFavoriteScreen({Key? key}) : super(key: key);

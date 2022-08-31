@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../screens/app_drawer.dart';
+import '../widgets/app_drawer.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
