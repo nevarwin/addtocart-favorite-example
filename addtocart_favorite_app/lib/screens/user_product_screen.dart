@@ -1,4 +1,5 @@
 import 'package:addtocart_favorite_app/provider/product_provider.dart';
+import 'package:addtocart_favorite_app/screens/edit_product_screen.dart';
 import 'package:addtocart_favorite_app/widgets/user_product_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +21,11 @@ class UserProductsScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(
+                EditProductScreen.routeName,
+              );
+            },
           ),
         ],
       ),

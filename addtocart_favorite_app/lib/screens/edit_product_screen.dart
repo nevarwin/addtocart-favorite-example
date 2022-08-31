@@ -1,5 +1,8 @@
-import 'package:addtocart_favorite_app/provider/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/product_model.dart';
+import '../provider/product_provider.dart';
 
 class EditProductScreen extends StatefulWidget {
   const EditProductScreen({Key? key}) : super(key: key);
@@ -36,8 +39,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
 
     _formGlobalKey.currentState?.save();
-    print(productTemplate.title);
-    print(productTemplate.price);
+
+    Provider.of<ProductProvider>(context, listen: false)
+        .addProduct(productTemplate);
+
+    Navigator.of(context).pop();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Successfully added a new product'),
+        duration: Duration(seconds: 1),
+      ),
+    );
   }
 
   @override
