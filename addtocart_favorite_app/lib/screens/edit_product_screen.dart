@@ -15,20 +15,46 @@ class EditProductScreen extends StatefulWidget {
 
 class _EditProductScreenState extends State<EditProductScreen> {
   final _priceFocusNode = FocusNode();
-
   final _formGlobalKey = GlobalKey<FormState>();
+  var _didChangeDependency = true;
 
   var productTemplate = Product(
-    id: '',
+    id: null,
     title: '',
     price: 0.0,
   );
 
+  var _initialValues = {
+    // 'id': '',
+    'title': '',
+    'price': '',
+  };
+
   @override
-  void dispose() {
-    // TODO: implement dispose
-    _priceFocusNode.dispose();
-    super.dispose();
+  void didChangeDependencies() {
+    print('didchangedependency');
+    if (_didChangeDependency) {
+      final productId =
+          ModalRoute != null ? ModalRoute.of(context)?.settings.arguments : '';
+
+      if (productId != null) {
+        productTemplate = Provider.of<ProductProvider>(
+          context,
+          listen: false,
+        ).findById(
+          productId.toString(),
+        );
+
+        _initialValues = {
+          // 'id': productTemplate.id,
+          'title': productTemplate.title,
+          'price': productTemplate.price.toString(),
+        };
+      }
+    }
+    _didChangeDependency = false;
+
+    super.didChangeDependencies();
   }
 
   void _submitForm() {
@@ -37,19 +63,44 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (!isValid!) {
       return;
     }
-
     _formGlobalKey.currentState?.save();
 
-    Provider.of<ProductProvider>(context, listen: false)
-        .addProduct(productTemplate);
+    if (productTemplate.id != null) {
+      Provider.of<ProductProvider>(
+        context,
+        listen: false,
+      ).updateProduct(
+        productTemplate.id,
+        productTemplate,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Successfully edited a product'),
+          duration: Duration(seconds: 1),
+        ),
+      );
+    } else {
+      Provider.of<ProductProvider>(
+        context,
+        listen: false,
+      ).addProduct(
+        productTemplate,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Successfully added a new product'),
+          duration: Duration(seconds: 1),
+        ),
+      );
+    }
 
     Navigator.of(context).pop();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Successfully added a new product'),
-        duration: Duration(seconds: 1),
-      ),
-    );
+  }
+
+  @override
+  void dispose() {
+    _priceFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -66,6 +117,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
             child: Column(
               children: [
                 TextFormField(
+                  initialValue: _initialValues['title'],
                   decoration: const InputDecoration(
                     labelText: 'Title',
                   ),
@@ -75,6 +127,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       id: productTemplate.id,
                       title: newValue!,
                       price: productTemplate.price,
+                      isFavorite: productTemplate.isFavorite,
                     );
                   },
                   onFieldSubmitted: (_) {
@@ -90,6 +143,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   },
                 ),
                 TextFormField(
+                  initialValue: _initialValues['price'],
                   decoration: const InputDecoration(
                     labelText: 'Price',
                   ),
@@ -100,6 +154,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       id: productTemplate.id,
                       title: productTemplate.title,
                       price: double.parse(newValue!),
+                      isFavorite: productTemplate.isFavorite,
                     );
                   },
                   onFieldSubmitted: (_) {

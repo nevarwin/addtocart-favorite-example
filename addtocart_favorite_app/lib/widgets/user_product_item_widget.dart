@@ -5,9 +5,11 @@ import '../screens/edit_product_screen.dart';
 class UserProductItemWidget extends StatelessWidget {
   const UserProductItemWidget({
     Key? key,
+    required this.id,
     required this.title,
   }) : super(key: key);
 
+  final String id;
   final String title;
 
   @override
@@ -20,7 +22,10 @@ class UserProductItemWidget extends StatelessWidget {
           children: [
             IconButton(
               onPressed: () {
-                Navigator.of(context).pushNamed(EditProductScreen.routeName);
+                Navigator.of(context).pushNamed(
+                  EditProductScreen.routeName,
+                  arguments: id,
+                );
               },
               icon: Icon(
                 Icons.edit,

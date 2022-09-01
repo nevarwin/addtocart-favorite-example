@@ -5,22 +5,22 @@ import 'product_model.dart';
 class ProductProvider with ChangeNotifier {
   final List<Product> _productList = [
     Product(
-      id: DateTime.now().toIso8601String(),
+      id: 'Id1',
       title: 'Doggo',
       price: 99.99,
     ),
     Product(
-      id: DateTime.now().toIso8601String(),
+      id: 'Id2',
       title: 'Shoe',
       price: 4000,
     ),
     Product(
-      id: DateTime.now().toIso8601String(),
+      id: 'Id3',
       title: 'Tshirt',
       price: 150,
     ),
     Product(
-      id: DateTime.now().toIso8601String(),
+      id: 'Id4',
       title: 'Watch',
       price: 5000,
     ),
@@ -46,5 +46,14 @@ class ProductProvider with ChangeNotifier {
     );
     _productList.add(newProduct);
     notifyListeners();
+  }
+
+  void updateProduct(String id, Product existingProduct) {
+    final productIndex = _productList.indexWhere((product) => product.id == id);
+
+    if (productIndex >= 0) {
+      _productList[productIndex] = existingProduct;
+      notifyListeners();
+    }
   }
 }
