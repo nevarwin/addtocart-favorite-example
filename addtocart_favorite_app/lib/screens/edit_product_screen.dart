@@ -32,12 +32,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   @override
   void didChangeDependencies() {
-    print('didchangedependency');
     if (_didChangeDependency) {
-      final productId =
-          ModalRoute != null ? ModalRoute.of(context)?.settings.arguments : '';
+      final productId = ModalRoute.of(context)?.settings.arguments ?? '';
 
-      if (productId != null) {
+      if (productId != '') {
         productTemplate = Provider.of<ProductProvider>(
           context,
           listen: false,
