@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import 'product_model.dart';
 
 class ProductProvider with ChangeNotifier {
+  var uuid = const Uuid().v1();
   final List<Product> _productList = [
     Product(
       id: 'Id1',
@@ -40,7 +42,7 @@ class ProductProvider with ChangeNotifier {
 
   void addProduct(Product product) {
     final newProduct = Product(
-      id: product.id,
+      id: product.id = uuid,
       title: product.title,
       price: product.price,
     );
