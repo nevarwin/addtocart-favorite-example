@@ -9,7 +9,7 @@ class UserProductItemWidget extends StatelessWidget {
     required this.title,
   }) : super(key: key);
 
-  final String id;
+  final id;
   final String title;
 
   @override
