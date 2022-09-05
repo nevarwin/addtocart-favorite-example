@@ -43,14 +43,16 @@ class ProductItemWidget extends StatelessWidget {
               builder: (context, product, child) {
                 return IconButton(
                   onPressed: () {
-                    ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
                     product.toggleFavorite();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Added to the favorites'),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    if (product.isFavorite) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Added to the favorites'),
+                          duration: Duration(seconds: 1),
+                        ),
+                      );
+                    }
                   },
                   icon: Icon(
                     product.isFavorite ? Icons.favorite : Icons.favorite_border,
