@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
 
 import 'product_model.dart';
@@ -40,14 +43,31 @@ class ProductProvider with ChangeNotifier {
     return _productList.firstWhere((product) => product.id == id);
   }
 
-  void addProduct(Product product) {
-    final newProduct = Product(
-      id: product.id = uuid,
-      title: product.title,
-      price: product.price,
+  Future<void> addProduct(Product product) async {
+    final url = Uri.https(
+      'testproject-68c84-default-rtdb.firebaseio.com',
+      '/products.json',
     );
-    _productList.add(newProduct);
-    notifyListeners();
+
+    return http
+        .post(
+      url,
+      body: json.encode(
+        {
+          'title': product.title,
+          'price': product.price,
+        },
+      ),
+    )
+        .then((response) {
+      final newProduct = Product(
+        id: json.decode(response.body)['name'],
+        title: product.title,
+        price: product.price,
+      );
+      _productList.add(newProduct);
+      notifyListeners();
+    });
   }
 
   void updateProduct(String id, Product existingProduct) {

@@ -17,6 +17,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _priceFocusNode = FocusNode();
   final _formGlobalKey = GlobalKey<FormState>();
   var _didChangeDependency = true;
+  var _isLoading = false;
 
   var productTemplate = Product(
     id: null,
@@ -61,38 +62,43 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (!isValid!) {
       return;
     }
+
     _formGlobalKey.currentState?.save();
+    setState(() {
+      _isLoading = true;
+    });
 
     if (productTemplate.id != null) {
-      Provider.of<ProductProvider>(
-        context,
-        listen: false,
-      ).updateProduct(
-        productTemplate.id,
-        productTemplate,
-      );
+      context.read<ProductProvider>().updateProduct(
+            productTemplate.id,
+            productTemplate,
+          );
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Successfully edited a product'),
           duration: Duration(seconds: 1),
         ),
       );
+      Navigator.of(context).pop();
     } else {
-      Provider.of<ProductProvider>(
-        context,
-        listen: false,
-      ).addProduct(
-        productTemplate,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Successfully added a new product'),
-          duration: Duration(seconds: 1),
-        ),
-      );
+      context
+          .read<ProductProvider>()
+          .addProduct(
+            productTemplate,
+          )
+          .then((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Successfully added a new product'),
+            duration: Duration(seconds: 1),
+          ),
+        );
+        setState(() {
+          _isLoading = false;
+        });
+        Navigator.of(context).pop();
+      });
     }
-
-    Navigator.of(context).pop();
   }
 
   @override
@@ -107,74 +113,79 @@ class _EditProductScreenState extends State<EditProductScreen> {
       appBar: AppBar(
         title: const Text('Edit Products'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formGlobalKey,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextFormField(
-                  initialValue: _initialValues['title'],
-                  decoration: const InputDecoration(
-                    labelText: 'Title',
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formGlobalKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        initialValue: _initialValues['title'],
+                        decoration: const InputDecoration(
+                          labelText: 'Title',
+                        ),
+                        textInputAction: TextInputAction.next,
+                        onSaved: (newValue) {
+                          productTemplate = Product(
+                            id: productTemplate.id,
+                            title: newValue!,
+                            price: productTemplate.price,
+                            isFavorite: productTemplate.isFavorite,
+                          );
+                        },
+                        onFieldSubmitted: (_) {
+                          FocusScope.of(context).requestFocus(
+                            _priceFocusNode,
+                          );
+                        },
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please provide a title';
+                          }
+                          return null;
+                        },
+                      ),
+                      TextFormField(
+                        initialValue: _initialValues['price'],
+                        decoration: const InputDecoration(
+                          labelText: 'Price',
+                        ),
+                        keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.done,
+                        onSaved: (newValue) {
+                          productTemplate = Product(
+                            id: productTemplate.id,
+                            title: productTemplate.title,
+                            price: double.parse(newValue!),
+                            isFavorite: productTemplate.isFavorite,
+                          );
+                        },
+                        onFieldSubmitted: (_) {
+                          _submitForm();
+                        },
+                        focusNode: _priceFocusNode,
+                        validator: (value) {
+                          if ((value!.isEmpty) ||
+                              (double.tryParse(value)! <= 0)) {
+                            return 'Provide a valid price';
+                          }
+                          return null;
+                        },
+                      ),
+                      TextButton(
+                        onPressed: _submitForm,
+                        child: const Text('Submit'),
+                      ),
+                    ],
                   ),
-                  textInputAction: TextInputAction.next,
-                  onSaved: (newValue) {
-                    productTemplate = Product(
-                      id: productTemplate.id,
-                      title: newValue!,
-                      price: productTemplate.price,
-                      isFavorite: productTemplate.isFavorite,
-                    );
-                  },
-                  onFieldSubmitted: (_) {
-                    FocusScope.of(context).requestFocus(
-                      _priceFocusNode,
-                    );
-                  },
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please provide a title';
-                    }
-                    return null;
-                  },
                 ),
-                TextFormField(
-                  initialValue: _initialValues['price'],
-                  decoration: const InputDecoration(
-                    labelText: 'Price',
-                  ),
-                  keyboardType: TextInputType.number,
-                  textInputAction: TextInputAction.done,
-                  onSaved: (newValue) {
-                    productTemplate = Product(
-                      id: productTemplate.id,
-                      title: productTemplate.title,
-                      price: double.parse(newValue!),
-                      isFavorite: productTemplate.isFavorite,
-                    );
-                  },
-                  onFieldSubmitted: (_) {
-                    _submitForm();
-                  },
-                  focusNode: _priceFocusNode,
-                  validator: (value) {
-                    if ((value!.isEmpty) || (double.tryParse(value)! <= 0)) {
-                      return 'Provide a valid price';
-                    }
-                    return null;
-                  },
-                ),
-                TextButton(
-                  onPressed: _submitForm,
-                  child: const Text('Submit'),
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }
