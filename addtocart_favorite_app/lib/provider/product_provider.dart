@@ -43,23 +43,28 @@ class ProductProvider with ChangeNotifier {
     return _productList.firstWhere((product) => product.id == id);
   }
 
-  Future<void> addProduct(Product product) async {
-    final url = Uri.https(
-      'testproject-68c84-default-rtdb.firebaseio.com',
-      '/products.json',
-    );
+  final url = Uri.https(
+    'testproject-68c84-default-rtdb.firebaseio.com',
+    '/products.json',
+  );
 
-    return http
-        .post(
-      url,
-      body: json.encode(
-        {
+  Future<void> fetchProductData() async {
+    try {
+      final response = await http.get(url);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<void> addProduct(Product product) async {
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode({
           'title': product.title,
           'price': product.price,
-        },
-      ),
-    )
-        .then((response) {
+        }),
+      );
       final newProduct = Product(
         id: json.decode(response.body)['name'],
         title: product.title,
@@ -67,7 +72,9 @@ class ProductProvider with ChangeNotifier {
       );
       _productList.add(newProduct);
       notifyListeners();
-    });
+    } catch (error) {
+      rethrow;
+    }
   }
 
   void updateProduct(String id, Product existingProduct) {

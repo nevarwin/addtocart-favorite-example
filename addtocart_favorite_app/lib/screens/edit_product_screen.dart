@@ -56,7 +56,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     super.didChangeDependencies();
   }
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
     var isValid = _formGlobalKey.currentState?.validate();
 
     if (!isValid!) {
@@ -81,23 +81,40 @@ class _EditProductScreenState extends State<EditProductScreen> {
       );
       Navigator.of(context).pop();
     } else {
-      context
-          .read<ProductProvider>()
-          .addProduct(
-            productTemplate,
-          )
-          .then((_) {
+      try {
+        await context.read<ProductProvider>().addProduct(
+              productTemplate,
+            );
+      } catch (error) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('An error occured'),
+              content: const Text('Something went wrong'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Okay'),
+                ),
+              ],
+            );
+          },
+        );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Successfully added a new product'),
             duration: Duration(seconds: 1),
           ),
         );
-        setState(() {
-          _isLoading = false;
-        });
         Navigator.of(context).pop();
-      });
+      }
     }
   }
 
