@@ -1,3 +1,4 @@
+import 'package:addtocart_favorite_app/provider/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:badges/badges.dart';
@@ -7,15 +8,39 @@ import '../widgets/product_grid_widget.dart';
 import '../provider/cart.dart';
 import '../widgets/app_drawer.dart';
 
-class ProductScreen extends StatelessWidget {
-  ProductScreen({Key? key}) : super(key: key);
+class ProductScreen extends StatefulWidget {
+  const ProductScreen({Key? key}) : super(key: key);
 
-//   @override
-//   State<ProductScreen> createState() => _ProductScreenState();
-// }
+  @override
+  State<ProductScreen> createState() => _ProductScreenState();
+}
 
-// class _ProductScreenState extends State<ProductScreen> {
+class _ProductScreenState extends State<ProductScreen> {
   var isFavorite = false;
+  // TODO: to review
+  var _isLoading = false;
+  var _isInit = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<ProductProvider>(context).fetchProductData().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +77,13 @@ class ProductScreen extends StatelessWidget {
         ],
       ),
       drawer: const AppDrawer(),
-      body: ProductGridWidget(
-        isFavorite: isFavorite,
-      ),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ProductGridWidget(
+              isFavorite: isFavorite,
+            ),
     );
   }
 }

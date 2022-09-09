@@ -8,27 +8,27 @@ import 'product_model.dart';
 
 class ProductProvider with ChangeNotifier {
   var uuid = const Uuid().v1();
-  final List<Product> _productList = [
-    Product(
-      id: 'Id1',
-      title: 'Doggo',
-      price: 99.99,
-    ),
-    Product(
-      id: 'Id2',
-      title: 'Shoe',
-      price: 4000,
-    ),
-    Product(
-      id: 'Id3',
-      title: 'Tshirt',
-      price: 150,
-    ),
-    Product(
-      id: 'Id4',
-      title: 'Watch',
-      price: 5000,
-    ),
+  List<Product> _productList = [
+    // Product(
+    //   id: 'Id1',
+    //   title: 'Doggo',
+    //   price: 99.99,
+    // ),
+    // Product(
+    //   id: 'Id2',
+    //   title: 'Shoe',
+    //   price: 4000,
+    // ),
+    // Product(
+    //   id: 'Id3',
+    //   title: 'Tshirt',
+    //   price: 150,
+    // ),
+    // Product(
+    //   id: 'Id4',
+    //   title: 'Watch',
+    //   price: 5000,
+    // ),
   ];
 
   List<Product> get getProductList {
@@ -51,6 +51,22 @@ class ProductProvider with ChangeNotifier {
   Future<void> fetchProductData() async {
     try {
       final response = await http.get(url);
+      final productData = json.decode(response.body) as Map<String, dynamic>;
+      final List<Product> loadedProducts = [];
+
+      productData.forEach((productId, productData) {
+        loadedProducts.insert(
+          0,
+          Product(
+            id: productId,
+            title: productData['title'],
+            price: productData['price'],
+          ),
+        );
+      });
+
+      _productList = loadedProducts;
+      notifyListeners();
     } catch (error) {
       rethrow;
     }
