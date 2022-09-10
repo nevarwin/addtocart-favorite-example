@@ -69,24 +69,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
     });
 
     if (productTemplate.id != null) {
-      context.read<ProductProvider>().updateProduct(
+      await context.read<ProductProvider>().updateProduct(
             productTemplate.id,
             productTemplate,
           );
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Successfully edited a product'),
-          duration: Duration(seconds: 1),
-        ),
-      );
-      Navigator.of(context).pop();
     } else {
       try {
         await context.read<ProductProvider>().addProduct(
               productTemplate,
             );
       } catch (error) {
-        showDialog(
+        await showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
@@ -103,19 +96,19 @@ class _EditProductScreenState extends State<EditProductScreen> {
             );
           },
         );
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Successfully added a new product'),
-            duration: Duration(seconds: 1),
-          ),
-        );
-        Navigator.of(context).pop();
       }
     }
+    setState(() {
+      _isLoading = false;
+    });
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Successfully added a new product'),
+        duration: Duration(seconds: 1),
+      ),
+    );
+    Navigator.of(context).pop();
   }
 
   @override
