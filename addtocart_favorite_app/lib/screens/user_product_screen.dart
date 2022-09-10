@@ -1,10 +1,10 @@
-import 'package:addtocart_favorite_app/provider/product_provider.dart';
-import 'package:addtocart_favorite_app/screens/edit_product_screen.dart';
-import 'package:addtocart_favorite_app/widgets/user_product_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/app_drawer.dart';
+import '../provider/product_provider.dart';
+import '../widgets/user_product_item_widget.dart';
+import './edit_product_screen.dart';
 
 class UserProductsScreen extends StatelessWidget {
   const UserProductsScreen({Key? key}) : super(key: key);
@@ -30,19 +30,28 @@ class UserProductsScreen extends StatelessWidget {
         ],
       ),
       drawer: const AppDrawer(),
-      body: ListView.builder(
-        itemCount: productData.getProductList.length,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              UserProductItemWidget(
-                id: productData.getProductList[index].id,
-                title: productData.getProductList[index].title,
-              ),
-              const Divider(),
-            ],
-          );
+      body: RefreshIndicator(
+        // TODO: review
+        onRefresh: () async {
+          await context.read<ProductProvider>().fetchProductData();
         },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView.builder(
+            itemCount: productData.getProductList.length,
+            itemBuilder: (context, index) {
+              return Column(
+                children: [
+                  UserProductItemWidget(
+                    id: productData.getProductList[index].id,
+                    title: productData.getProductList[index].title,
+                  ),
+                  const Divider(),
+                ],
+              );
+            },
+          ),
+        ),
       ),
     );
   }

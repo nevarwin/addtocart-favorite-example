@@ -17,7 +17,7 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen> {
   var isFavorite = false;
-  // TODO: to review
+  // TODO: review
   var _isLoading = false;
   var _isInit = true;
 
@@ -32,7 +32,7 @@ class _ProductScreenState extends State<ProductScreen> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<ProductProvider>(context).fetchProductData().then((_) {
+      context.watch<ProductProvider>().fetchProductData().then((_) {
         setState(() {
           _isLoading = false;
         });

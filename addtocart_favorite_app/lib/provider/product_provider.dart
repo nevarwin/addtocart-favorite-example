@@ -93,10 +93,24 @@ class ProductProvider with ChangeNotifier {
     }
   }
 
-  void updateProduct(String id, Product existingProduct) {
+  // TODO: review
+  Future<void> updateProduct(
+    String id,
+    Product existingProduct,
+  ) async {
     final productIndex = _productList.indexWhere((product) => product.id == id);
-
+    final url = Uri.https(
+      'testproject-68c84-default-rtdb.firebaseio.com',
+      '/products/$id.json',
+    );
     if (productIndex >= 0) {
+      await http.patch(
+        url,
+        body: json.encode({
+          'title': existingProduct.title,
+          'price': existingProduct.price,
+        }),
+      );
       _productList[productIndex] = existingProduct;
       notifyListeners();
     }
