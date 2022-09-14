@@ -79,6 +79,7 @@ class ProductProvider with ChangeNotifier {
         body: json.encode({
           'title': product.title,
           'price': product.price,
+          'isFavorite': product.isFavorite,
         }),
       );
       final newProduct = Product(
@@ -116,8 +117,24 @@ class ProductProvider with ChangeNotifier {
     }
   }
 
-  void removeProduct(String id) {
-    _productList.removeWhere((element) => element.id == id);
+  Future<void> removeProduct(String id) async {
+    final url = Uri.https(
+      'testproject-68c84-default-rtdb.firebaseio.com',
+      '/products/$id.json',
+    );
+
+    final productIndex = _productList.indexWhere((element) => element.id == id);
+    Product productData = _productList[productIndex];
+
+    _productList.removeAt(productIndex);
+    notifyListeners();
+
+    final response = await http.delete(url);
+
+    if (response.statusCode >= 400) {
+      _productList.add(productData);
+    }
+
     notifyListeners();
   }
 }
