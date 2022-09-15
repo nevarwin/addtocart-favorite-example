@@ -51,8 +51,11 @@ class ProductProvider with ChangeNotifier {
   Future<void> fetchProductData() async {
     try {
       final response = await http.get(url);
-      final productData = json.decode(response.body) as Map<String, dynamic>;
       final List<Product> loadedProducts = [];
+      final productData = json.decode(response.body) as Map<String, dynamic>;
+      if (productData.isEmpty) {
+        return;
+      }
 
       productData.forEach((productId, productData) {
         loadedProducts.insert(
@@ -61,6 +64,7 @@ class ProductProvider with ChangeNotifier {
             id: productId,
             title: productData['title'],
             price: productData['price'],
+            isFavorite: productData['isFavorite'],
           ),
         );
       });

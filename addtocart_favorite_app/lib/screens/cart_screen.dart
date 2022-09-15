@@ -43,20 +43,7 @@ class CartScreen extends StatelessWidget {
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Provider.of<OrderProvider>(
-                        context,
-                        listen: false,
-                      ).addOrders(
-                        cart.getTotalAmount,
-                        cart.getCartItems.values.toList(),
-                      );
-                      // cart.clearCart();
-                      print(cart.getCartItems.values.toList());
-                    },
-                    child: const Text('Checkout'),
-                  ),
+                  CheckoutButton(cart: cart),
                 ],
               ),
             ),
@@ -81,6 +68,36 @@ class CartScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class CheckoutButton extends StatefulWidget {
+  const CheckoutButton({
+    Key? key,
+    required this.cart,
+  }) : super(key: key);
+
+  final CartProvider cart;
+
+  @override
+  State<CheckoutButton> createState() => _CheckoutButtonState();
+}
+
+class _CheckoutButtonState extends State<CheckoutButton> {
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: widget.cart.getTotalAmount <= 0
+          ? null
+          : () async {
+              await context.read<OrderProvider>().addOrders(
+                    widget.cart.getTotalAmount,
+                    widget.cart.getCartItems.values.toList(),
+                  );
+              widget.cart.clearCart();
+            },
+      child: const Text('Checkout'),
     );
   }
 }

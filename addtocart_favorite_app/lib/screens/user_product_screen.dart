@@ -33,6 +33,7 @@ class UserProductsScreen extends StatelessWidget {
       body: RefreshIndicator(
         // TODO: review
         onRefresh: () async {
+          print('refresh');
           await context.read<ProductProvider>().fetchProductData();
         },
         child: Padding(

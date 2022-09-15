@@ -1,12 +1,12 @@
-import 'package:addtocart_favorite_app/provider/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:badges/badges.dart';
 
 import './cart_screen.dart';
 import '../widgets/product_grid_widget.dart';
-import '../provider/cart.dart';
 import '../widgets/app_drawer.dart';
+import '../provider/cart.dart';
+import '../provider/product_provider.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({Key? key}) : super(key: key);
@@ -16,74 +16,72 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
-  var isFavorite = false;
-  // TODO: review
-  var _isLoading = false;
-  var _isInit = true;
+  final isFavorite = false;
 
-  @override
-  void initState() {
-    super.initState();
+  late Future _futureFavorite;
+
+  Future futureFavoriteMethod() {
+    return context.read<ProductProvider>().fetchProductData();
   }
 
   @override
-  void didChangeDependencies() {
-    if (_isInit) {
-      setState(() {
-        _isLoading = true;
-      });
-      context.watch<ProductProvider>().fetchProductData().then((_) {
-        setState(() {
-          _isLoading = false;
-        });
-      });
-    }
-    _isInit = false;
-    super.didChangeDependencies();
+  void initState() {
+    _futureFavorite = futureFavoriteMethod();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Products'),
-        actions: [
-          Consumer<CartProvider>(
-            builder: (context, cart, child) {
-              return Badge(
-                position: BadgePosition.topStart(),
-                badgeContent: Text(
-                  cart.getCartCount.toString(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pushNamed(
-                        CartScreen.routeName,
-                      );
-                    },
-                    child: const Icon(
-                      Icons.shopping_cart,
+        appBar: AppBar(
+          title: const Text('Products'),
+          actions: [
+            Consumer<CartProvider>(
+              builder: (context, cart, child) {
+                return Badge(
+                  position: BadgePosition.topStart(),
+                  badgeContent: Text(
+                    cart.getCartCount.toString(),
+                    style: const TextStyle(
+                      color: Colors.white,
                     ),
                   ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      drawer: const AppDrawer(),
-      body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : ProductGridWidget(
-              isFavorite: isFavorite,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                          CartScreen.routeName,
+                        );
+                      },
+                      child: const Icon(
+                        Icons.shopping_cart,
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
-    );
+          ],
+        ),
+        drawer: const AppDrawer(),
+        body: FutureBuilder(
+          future: _futureFavorite,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text('An error Occured'),
+              );
+            }
+            return ProductGridWidget(
+              isFavorite: isFavorite,
+            );
+          },
+        ));
   }
 }
