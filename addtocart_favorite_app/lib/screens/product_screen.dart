@@ -74,8 +74,8 @@ class _ProductScreenState extends State<ProductScreen> {
               );
             }
             if (snapshot.hasError) {
-              return const Center(
-                child: Text('An error Occured'),
+              return Center(
+                child: Text('${snapshot.error}'),
               );
             }
             return ProductGridWidget(

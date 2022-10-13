@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class Product with ChangeNotifier {
-  var id;
+  dynamic id;
   final String title;
   final double price;
   bool isFavorite;

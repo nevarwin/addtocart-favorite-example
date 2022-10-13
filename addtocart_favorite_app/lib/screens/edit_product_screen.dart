@@ -22,7 +22,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   var productTemplate = Product(
     id: null,
     title: '',
-    price: 0.0,
+    price: 0,
   );
 
   var _initialValues = {
@@ -84,7 +84,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
           builder: (context) {
             return AlertDialog(
               title: const Text('An error occured'),
-              content: const Text('Something went wrong'),
+              content: Text('Something went wrong $error'),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -180,8 +180,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         },
                         focusNode: _priceFocusNode,
                         validator: (value) {
-                          if ((value!.isEmpty) ||
-                              (double.tryParse(value)! <= 0)) {
+                          if ((value!.isEmpty) || (double.tryParse(value)! <= 0)) {
                             return 'Provide a valid price';
                           }
                           return null;

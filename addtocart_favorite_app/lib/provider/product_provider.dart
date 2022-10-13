@@ -8,28 +8,7 @@ import 'product_model.dart';
 
 class ProductProvider with ChangeNotifier {
   var uuid = const Uuid().v1();
-  List<Product> _productList = [
-    // Product(
-    //   id: 'Id1',
-    //   title: 'Doggo',
-    //   price: 99.99,
-    // ),
-    // Product(
-    //   id: 'Id2',
-    //   title: 'Shoe',
-    //   price: 4000,
-    // ),
-    // Product(
-    //   id: 'Id3',
-    //   title: 'Tshirt',
-    //   price: 150,
-    // ),
-    // Product(
-    //   id: 'Id4',
-    //   title: 'Watch',
-    //   price: 5000,
-    // ),
-  ];
+  List<Product> _productList = [];
 
   List<Product> get getProductList {
     return [..._productList];
@@ -52,19 +31,20 @@ class ProductProvider with ChangeNotifier {
     try {
       final response = await http.get(url);
       final List<Product> loadedProducts = [];
-      final productData = json.decode(response.body) as Map<String, dynamic>;
+      final productData = json.decode(response.body);
+      print(productData);
       if (productData.isEmpty) {
         return;
       }
 
-      productData.forEach((productId, productData) {
+      productData.forEach((productId, data) {
         loadedProducts.insert(
           0,
           Product(
             id: productId,
-            title: productData['title'],
-            price: productData['price'],
-            isFavorite: productData['isFavorite'],
+            title: data['title'],
+            price: data['price'],
+            isFavorite: data['isFavorite'],
           ),
         );
       });
@@ -130,9 +110,11 @@ class ProductProvider with ChangeNotifier {
     final productIndex = _productList.indexWhere((element) => element.id == id);
     Product productData = _productList[productIndex];
 
+    // removed from memory
     _productList.removeAt(productIndex);
     notifyListeners();
 
+    // removed from firestore
     final response = await http.delete(url);
 
     if (response.statusCode >= 400) {

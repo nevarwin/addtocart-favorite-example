@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/order_item.dart';
+import '../widgets/order_item_widget.dart';
 import '../widgets/app_drawer.dart';
 import '../provider/order.dart';
 
@@ -43,8 +43,8 @@ class _OrderScreenState extends State<OrderScreen> {
             );
           }
           if (snapshot.hasError) {
-            return const Center(
-              child: Text('An error Occured'),
+            return Center(
+              child: Text('$snapshot.error'),
             );
           }
           return Consumer<OrderProvider>(
